@@ -37,11 +37,11 @@ public class BlockItem extends CollidableItem
 	
 	public void changeColor(){
 		mSprite.setColor(SELECTED);
+		mIsSelect = false;
 	}
 	
 	public void select(){
 		mIsSelect = true;
-		//mSprite.setColor(SELECTED);
 	}
 	
 	public boolean isSelect(){

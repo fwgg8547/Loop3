@@ -46,20 +46,7 @@ public class TouchModel extends CollisionModel
 					Lg.i(TAG, "touch was deleted id =" +itm.getId());
 					freeItem(i);
 					i--; // mblock was reduced
-					//new InnerEvent().notifyEvent(InnerEvent.InnerMessage.Event.GameOver);
 				}
-				/*
-				List<CollidableItem> cl = mCollisionManamger.getCollisionItem(rect);
-				Lg.i(TAG, "get col");
-				Iterator<CollidableItem> ite = cl.iterator();
-				while(ite.hasNext()){
-					CollidableItem i = ite.next();
-					if(i instanceof BlockItem){
-						((BlockItem)i).select();
-					}
-					Lg.d(TAG,"hit " + i.mIndex);
-				}
-				*/
 				itm.mIsDeleted = true;
 			}
 
