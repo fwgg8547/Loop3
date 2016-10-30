@@ -95,7 +95,7 @@ public class BlockModel extends CollisionModel
 				}
 				
 				if(itm.isSelect()){
-					//itm.changeColor();
+					itm.changeColor();
 				}
 				
 				// animation check
@@ -138,6 +138,12 @@ public class BlockModel extends CollisionModel
 			item.select();
 		}
 	}
+
+  public void select(BlockItem item){
+    if(item != null) {
+      item.select();
+    }
+  }
 	
 	public ItemBase createItem(int pattern, float y){
 		BlockItem ib = null;

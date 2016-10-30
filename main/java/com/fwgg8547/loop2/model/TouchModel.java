@@ -46,7 +46,7 @@ public class TouchModel extends CollisionModel
 					Lg.i(TAG, "touch was deleted id =" +itm.getId());
 					freeItem(i);
 					i--; // mblock was reduced
-					new InnerEvent().notifyEvent(InnerEvent.InnerMessage.Event.GameOver);
+					//new InnerEvent().notifyEvent(InnerEvent.InnerMessage.Event.GameOver);
 				}
 				/*
 				List<CollidableItem> cl = mCollisionManamger.getCollisionItem(rect);
@@ -120,7 +120,7 @@ public class TouchModel extends CollisionModel
 		CollidableItem it = null;
 		try{
 			mLock.writeLock();
-
+      
 			it = (CollidableItem)super.createItem();
 			if(it == null){
 				return null;
@@ -132,6 +132,7 @@ public class TouchModel extends CollisionModel
 			it.setType(GLEngine.TOUCHMODELINDX);
 			Sprite s = new Sprite(mIdOffset + mIdCurr);
 			it.setId(mIdOffset+mIdCurr);
+      Lg.i(TAG, "touch item created id= " + it.getId());
 			mIdCurr++;
 			it.setSprite(s);
 			it.setPosition(l, t, 0.0f, 0.0f);

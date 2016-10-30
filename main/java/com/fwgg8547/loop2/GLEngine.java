@@ -52,9 +52,9 @@ public class GLEngine extends GLEngineBase
 	public static final int DEBUGMODELINDX = TEXTMODELINDX +1;
 	// collidable
 	public static final int WALLMODELINDX = 0;
-	public static final int BATTMODELINDX = WALLMODELINDX + 1;
-	public static final int BLOCKMODELINDX = BATTMODELINDX + 1;
-	public static final int TOUCHMODELINDX = BLOCKMODELINDX + 1;
+	public static final int BATTMODELINDX = WALLMODELINDX + 1; // 1
+	public static final int BLOCKMODELINDX = BATTMODELINDX + 1; // 2
+	public static final int TOUCHMODELINDX = BLOCKMODELINDX + 1; // 3
 	
 	private GLController mController;	
 	private BlockGenerater mBlockGenerater;

@@ -273,6 +273,15 @@ BatModel.DirectionDetectListener
 	@Override
 	public boolean narrowCollision(ItemBase item1, ItemBase item2)
 	{
+    Lg.i(TAG, "item type " + item1.getType() + " : " + item2.getType());
+    if((item1.getType() == GLEngine.TOUCHMODELINDX) &&
+       (item2.getType() == GLEngine.BLOCKMODELINDX)){
+      mBlock.select((BlockItem)item2);
+    } else if((item2.getType() == GLEngine.TOUCHMODELINDX) &&
+              (item1.getType() == GLEngine.BLOCKMODELINDX)){
+      mBlock.select((BlockItem)item1);
+    }
+    
 		return false;
 	}
 
