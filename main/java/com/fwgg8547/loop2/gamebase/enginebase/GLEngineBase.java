@@ -345,16 +345,8 @@ abstract public class GLEngineBase
 	}
 
 	private void updateWorld(double elapsed){
-		try{
-			//mLock.writeLock();
 			mWorld.setUpdateRequired(true);
 			mWorld.update(elapsed);
-		} catch(Exception e){
-			
-		} finally {
-			//mLock.writeUnlock();
-		}
-		
 	}
 	
 	private boolean updateControl()
