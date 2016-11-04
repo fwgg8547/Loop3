@@ -30,12 +30,15 @@ public class TouchModel extends CollisionModel
 	private boolean mFirst;
 	private boolean mDeleting;
 	private PendingRequest mPending;
-	
+
+  
 	public class PendingRequest {
 		public RectF mRect;
-		
-		public PendingRequest(RectF r){
+		public TouchItem.FlickType mType;
+    
+		public PendingRequest(RectF r, TouchItem.FlickType t){
 			mRect = r;
+      mType = t;
 		}
 	}
 
@@ -66,7 +69,7 @@ public class TouchModel extends CollisionModel
 		}
 		
 		if(mPending != null){
-			createItem(mPending.mRect);
+			createItem(mPending.mRect, mPending.mType);
 			mPending = null;
 		}
 	}
@@ -105,11 +108,11 @@ public class TouchModel extends CollisionModel
 		return mDeleting;
 	}
 
-	public void createItemRequest(RectF rect)
+	public void createItemRequest(RectF rect, TouchItem.FlickType t)
 	{
 		// TODO: Implement this method
 		if(mPending == null){
-			mPending = new PendingRequest(rect);
+			mPending = new PendingRequest(rect, t);
 		}
 		return ;
 	}
@@ -117,22 +120,22 @@ public class TouchModel extends CollisionModel
 	@Override
 	public ItemBase createItem(int pattern)
 	{
-		return createItem(pattern, new RectF());
+		return createItem(pattern, new RectF(), TouchItem.FlickType.CENTER);
 	}
 
-	public ItemBase createItem(RectF rect)
+	public ItemBase createItem(RectF rect, TouchItem.FlickType t)
 	{
 		// TODO: Implement this method
-		return createItem(0,rect);
+		return createItem(0,rect,t);
 	}
 
-	public ItemBase createItem(int pattern, RectF rect)
+	public ItemBase createItem(int pattern, RectF rect, TouchItem.FlickType type)
 	{		
-		CollidableItem it = null;
+		TouchItem it = null;
 		try{
 			mLock.writeLock();
       
-			it = (CollidableItem)super.createItem();
+			it = (TouchItem)super.createItem();
 			if(it == null){
 				return null;
 			}
@@ -144,12 +147,13 @@ public class TouchModel extends CollisionModel
 			Sprite s = new Sprite(mIdOffset + mIdCurr);
 			s.setTextureUv(ResourceFileReader.getUv(0));
 			it.setId(mIdOffset+mIdCurr);
-      Lg.i(TAG, "touch item created id= " + it.getId());
+      		Lg.i(TAG, "touch item created id= " + it.getId());
 			mIdCurr++;
 			it.setSprite(s);
 			it.setPosition(l, t, 0.0f, 0.0f);
 			it.setRect(new RectF(-1*w/2, -1*h/2, w/2, h/2));
 			it.setColor(new float[]{0,1,1,1});
+      		it.setFlickType(type);
 			it.mIsDeleted = false;
 			return it;
 

@@ -3,7 +3,7 @@
 	"Comment" : "frame(int) ppf(float) vect(x(float), y(float))",
 	"Sequence" : [
 		[
-			[120,  1.0, 0.0, -1.0, 0]
+			[120,  1.0, 0.0, -6.0, 0]
 		],
 		[
 			[3000, 1.0, 0.0, 0.0,  1]

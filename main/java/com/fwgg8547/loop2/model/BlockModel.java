@@ -96,7 +96,6 @@ public class BlockModel extends CollisionModel
 				}
 				
 				if(itm.isSelect()){
-					
 					itm.changeColor();
 				} else {
 					bIsAllItemSelected = false;
@@ -151,6 +150,12 @@ public class BlockModel extends CollisionModel
 		}
 	}
 
+  public void attack(BlockItem item, int t){
+    if(item != null){
+      item.attack(t);
+    }
+  }
+  
   public void select(BlockItem item){
     if(item != null) {
       item.select(true);
@@ -202,9 +207,10 @@ public class BlockModel extends CollisionModel
 		try{
 			mLock.writeLock();
 			ib = (BlockItem)super.createItem();
-			ib.setType(GLEngine.BLOCKMODELINDX);
+			//ib.setType(pattern);
 			ItemPattern p = ResourceFileReader.getPattern(ResourceFileReader.Type.Block,pattern);
 			mGenerater.createItem(ib, p);
+      ib.setBlockType(pattern);
 		} catch (Exception e){
 			Lg.e(TAG, e.toString());
 		} finally {

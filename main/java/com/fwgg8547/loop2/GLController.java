@@ -85,6 +85,14 @@ BatModel.DirectionDetectListener
 	public void onSingleTapUp(PointF pos)
 	{
 		Lg.i(TAG, "onSingleTapUp " + pos.x + ":" + pos.y);
+		RectF rect = new RectF(pos.x, pos.y,
+                           pos.x+1, pos.y+1);
+		
+		if(mTouch == null){
+			return;
+		}
+		
+		mTouch.createItemRequest(rect, TouchItem.FlickType.CENTER);
     return;
 	}
 	
@@ -92,6 +100,37 @@ BatModel.DirectionDetectListener
 	public void onFling(PointF pos1,PointF pos2, float vx, float vy)
 	{
 		Lg.i(TAG, "onFling " + "pos1=" +pos1.x + ":" + pos1.y + " pos2= " + pos2.x + ":" + pos2.y);
+		RectF rect = new RectF(pos1.x, pos1.y,
+                           pos1.x+1, pos1.y+1);
+    TouchItem.FlickType t;
+    float dx = pos2.x - pos1.x;
+    float dy = pos2.y - pos1.y;
+    if (dx >= 0) {
+      if (dx*dx > dy*dy) {
+        t = TouchItem.FlickType.RIGHT;
+      } else {
+        if (dy >= 0) {
+          t = TouchItem.FlickType.TOP;
+        } else {
+          t = TouchItem.FlickType.BOTTOM;
+        }
+      }
+    } else {
+      if (dx*dx > dy*dy) {
+        t = TouchItem.FlickType.LEFT;
+      } else {
+        if (dy >= 0) {
+          t = TouchItem.FlickType.TOP;
+        } else {
+          t = TouchItem.FlickType.BOTTOM;
+        }
+      }
+    }
+		if(mTouch == null){
+			return;
+		}
+		
+		mTouch.createItemRequest(rect, t);
     return;
 	}
   
@@ -99,6 +138,7 @@ BatModel.DirectionDetectListener
 	public void onScroll(PointF pos1, PointF pos2, float x, float y)
 	{
 		Lg.i(TAG, "scroll x y " + pos2.x + " ; " + pos2.y +";" +x+";"+y);
+    /*
 		float l,t,r,b;
 		if(pos2.x < pos2.x + x) {
 			l=pos2.x;
@@ -122,6 +162,7 @@ BatModel.DirectionDetectListener
 		}
 		
 		mTouch.createItemRequest(rect);
+    */
 	}
   
 	private ScrollManager.Direct getHitDirect(float r){
@@ -230,10 +271,11 @@ BatModel.DirectionDetectListener
     Lg.i(TAG, "item type " + item1.getType() + " : " + item2.getType());
     if((item1.getType() == GLEngine.TOUCHMODELINDX) &&
        (item2.getType() == GLEngine.BLOCKMODELINDX)){
-      mBlock.select((BlockItem)item2);
+      //mBlock.select((BlockItem)item2);
+      mBlock.attack((BlockItem)item2, ((TouchItem)item1).getFlick());
     } else if((item2.getType() == GLEngine.TOUCHMODELINDX) &&
               (item1.getType() == GLEngine.BLOCKMODELINDX)){
-      mBlock.select((BlockItem)item1);
+      mBlock.attack((BlockItem)item1, ((TouchItem)item2).getFlick());
     }
     
 		return false;

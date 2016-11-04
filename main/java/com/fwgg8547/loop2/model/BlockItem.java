@@ -11,8 +11,11 @@ public class BlockItem extends CollidableItem
 	private boolean mIsSelect;
 	
 	public enum Type{
+    TOP,
+    BOTTOM,
 		RIGHT,
 		LEFT,
+    CENTER
 	}
 	
 	public BlockItem(){
@@ -20,6 +23,34 @@ public class BlockItem extends CollidableItem
 		mIsSelect = false;
 	}
 	
+	public void setBlockType(int t){
+		switch(t){
+			case 1:
+				mType = Type.TOP;
+				mSprite.setColor(new float[]{1,1,1,1 });
+				break;
+			case 2:
+				mType = Type.BOTTOM;
+				mSprite.setColor(new float[]{1,0,1,1 });
+				break;
+			case 3:
+				mType = Type.RIGHT;
+				mSprite.setColor(new float[]{1,1,0,1 });
+				break;
+			case 4:
+				mType = Type.LEFT;
+				mSprite.setColor(new float[]{0,1,1,1 });
+				break;
+			case 5:
+				mType = Type.CENTER;
+				mSprite.setColor(new float[]{0,0,1,1 });
+				break;
+			default :
+				mType = Type.LEFT;
+				mSprite.setColor(new float[]{1,0,0,1 });
+		}
+	}
+  
 	public void setBlockType(Type t){
 		switch(t){
 			case RIGHT:
@@ -59,4 +90,32 @@ public class BlockItem extends CollidableItem
 	public boolean isSelect(){
 		return mIsSelect;
 	}
+
+  public void attack(int i){
+    Type t = convInt2Type(i);
+    if (mType == t){
+      select();
+    }
+  }
+
+  private Type convInt2Type(int i){
+    Type t;
+    switch(i) {
+    case 0:
+      t = Type.TOP;
+      break;
+    case 1:
+      t = Type.BOTTOM;
+      break;
+    case 2:
+      t = Type.RIGHT;
+      break;
+    case 3:
+      t = Type.LEFT;
+      break;
+    default:
+      t = Type.CENTER;
+    }
+    return t;
+  }
 }
