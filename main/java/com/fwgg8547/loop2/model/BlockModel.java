@@ -78,6 +78,7 @@ public class BlockModel extends CollisionModel
 	public void onUpdate()
 	{
 		Lg.a(TAG, "update");
+		boolean bIsAllItemSelected = true;
 		try{
 			mLock.writeLock();
 			for(int i=0; i<mItemList.size();i++){
@@ -95,12 +96,23 @@ public class BlockModel extends CollisionModel
 				}
 				
 				if(itm.isSelect()){
+					
 					itm.changeColor();
+				} else {
+					bIsAllItemSelected = false;
 				}
 				
 				// animation check
 				if(!itm.mIsDeleted) {
 					PointF pos = itm.moveAnimation();
+				}
+			}
+			
+			if(bIsAllItemSelected){
+				for(int i=0; i<mItemList.size();i++){
+					BlockItem itm = (BlockItem)mItemList.get(i);
+					itm.select(false);
+					itm.changeColor();
 				}
 			}
 		} catch(Exception e){
@@ -135,13 +147,13 @@ public class BlockModel extends CollisionModel
 		Iterator<BlockItem> ite = items.iterator();
 		while(ite.hasNext()){
 			BlockItem item = ite.next();
-			item.select();
+			item.select(true);
 		}
 	}
 
   public void select(BlockItem item){
     if(item != null) {
-      item.select();
+      item.select(true);
     }
   }
 	

@@ -6,6 +6,7 @@ public class BlockItem extends CollidableItem
 {
 	private static final String TAG = BlockItem.class.getSimpleName();
 	private static final float[] SELECTED = new float[]{1,1,0,1};
+	private static final float[] UNSELECTED = new float[]{1,1,1,1};
 	private Type mType;
 	private boolean mIsSelect;
 	
@@ -36,12 +37,27 @@ public class BlockItem extends CollidableItem
 	}
 	
 	public void changeColor(){
+<<<<<<< HEAD
 		mSprite.setColor(SELECTED);
 		mIsSelect = false;
 	}
 	
 	public void select(){
 		mIsSelect = true;
+=======
+		if(mIsSelect){
+			mSprite.setColor(SELECTED);
+		} else{
+			mSprite.setColor(UNSELECTED);
+		}
+		
+		//mIsSelect = false;
+	}
+	
+	public void select(boolean b){
+		mIsSelect = b;
+		//mSprite.setColor(SELECTED);
+>>>>>>> aa490f0a0ff645b1d4409f76d3391b850b176882
 	}
 	
 	public boolean isSelect(){
