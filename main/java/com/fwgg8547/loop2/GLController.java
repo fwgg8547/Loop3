@@ -76,6 +76,7 @@ BatModel.DirectionDetectListener
 	@Override
 	public void onDown(PointF pos)
 	{
+		Lg.i(TAG, "ondown");
 		return ;
 		/*
 		if(mBatt.isDeleting()){
@@ -167,7 +168,7 @@ BatModel.DirectionDetectListener
 			return;
 		}
 		
-		mTouch.createItem(0, rect);
+		mTouch.createItemRequest(rect);
 		/*
 		List<CollidableItem> cl = mCollisitionManager.getCollisionItem(rect);
 		Lg.i(TAG, "get col");

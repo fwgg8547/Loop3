@@ -112,6 +112,10 @@ public class ResourceFileReader
 		return mMotionPatternArray.get(id);
 	}
 	
+	public static float[] getUv(int div){
+		return mTexturePatternArray.get(0)[0].uv;
+	}
+	
 	public void loadSequence(){
 		Resources r = mContext.getResources();
 		InputStream is = r.openRawResource(R.raw.sequence);

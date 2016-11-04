@@ -24,11 +24,20 @@ import com.fwgg8547.loop2.gamebase.modelbase.*;
 public class TouchModel extends CollisionModel
 {
 	private static final String TAG = TouchModel.class.getSimpleName();
-	private static final int OBJ_NUM = 1;
+	private static final int OBJ_NUM = 10;
 	private int mIdOffset;
 	private int mIdCurr;
 	private boolean mFirst;
 	private boolean mDeleting;
+	private PendingRequest mPending;
+	
+	public class PendingRequest {
+		public RectF mRect;
+		
+		public PendingRequest(RectF r){
+			mRect = r;
+		}
+	}
 
 	public TouchModel(){
 		super();
@@ -48,18 +57,7 @@ public class TouchModel extends CollisionModel
 					i--; // mblock was reduced
 					//new InnerEvent().notifyEvent(InnerEvent.InnerMessage.Event.GameOver);
 				}
-				/*
-				List<CollidableItem> cl = mCollisionManamger.getCollisionItem(rect);
-				Lg.i(TAG, "get col");
-				Iterator<CollidableItem> ite = cl.iterator();
-				while(ite.hasNext()){
-					CollidableItem i = ite.next();
-					if(i instanceof BlockItem){
-						((BlockItem)i).select();
-					}
-					Lg.d(TAG,"hit " + i.mIndex);
-				}
-				*/
+
 				itm.mIsDeleted = true;
 			}
 
@@ -67,6 +65,11 @@ public class TouchModel extends CollisionModel
 			Lg.e(TAG,e.toString());
 		}finally{
 			mLock.writeUnlock();
+		}
+		
+		if(mPending != null){
+			createItem(mPending.mRect);
+			mPending = null;
 		}
 	}
 
@@ -86,7 +89,7 @@ public class TouchModel extends CollisionModel
 	@Override
 	public int getTextureId()
 	{
-		return  R.drawable.circle2;
+		return  R.drawable.wall_image;
 	}
 
 	public void initialize(ReadersWriterLock lock, int offset, ModelGroup mg, int p){
@@ -96,11 +99,21 @@ public class TouchModel extends CollisionModel
 		mIndexCount =0;
 		mFirst = false;
 		mIsScrollable = false;
+		mPending =null;
 	}
 
 	//====
 	public boolean isDeleting(){
 		return mDeleting;
+	}
+
+	public void createItemRequest(RectF rect)
+	{
+		// TODO: Implement this method
+		if(mPending == null){
+			mPending = new PendingRequest(rect);
+		}
+		return ;
 	}
 
 	@Override
@@ -131,16 +144,14 @@ public class TouchModel extends CollisionModel
 			
 			it.setType(GLEngine.TOUCHMODELINDX);
 			Sprite s = new Sprite(mIdOffset + mIdCurr);
+			s.setTextureUv(ResourceFileReader.getUv(0));
 			it.setId(mIdOffset+mIdCurr);
       Lg.i(TAG, "touch item created id= " + it.getId());
 			mIdCurr++;
 			it.setSprite(s);
 			it.setPosition(l, t, 0.0f, 0.0f);
 			it.setRect(new RectF(-1*w/2, -1*h/2, w/2, h/2));
-			//it.setCenterOffset(new Vec2(0,0));
-			//it.setAngleCenter(it.getPosition());
-			it.setColor(new float[]{1,1,1,1});
-			//it.moveAnimation();
+			it.setColor(new float[]{0,1,1,1});
 			it.mIsDeleted = false;
 			return it;
 
