@@ -317,8 +317,7 @@ public class BlockModel extends CollisionModel
 					it.setScalePattern(p.mScalePattern, null);
 				}
 				if(p.mTexturePattern != null){
-					Random rand = new Random();
-					it.setTexturePattern(p.mTexturePattern, rand.nextInt(9),  null);
+					it.setTexturePattern(p.mTexturePattern, 0,  null);
 				}
 				it.setAnimationValid(true);
 				it.moveAnimation(); // init 

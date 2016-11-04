@@ -177,8 +177,8 @@ public class ResourceFileReader
 			
 			JSONArray array = obj.getJSONArray("Block");
 			if(array != null){
-				//block = getItemPattern(array);
-				block = getItemPatternBlock();
+				block = getItemPattern(array);
+				//block = getItemPatternBlock();
 			}
 			
 			array = obj.getJSONArray("Ball");
@@ -222,6 +222,7 @@ public class ResourceFileReader
 		float battwidth = GameConfig.WIDTH*2;
 		float pointsize = GameConfig.CENTEROFFSET*2;
 		float offset = battwidth*GameConfig.MAPOFFSETW*-1;
+    
 		int indx=0;
 		for(int i=0; i<GameConfig.MAPHEIGHT; i++){
 			for(int j = -GameConfig.MAPOFFSETW; j< GameConfig.MAPWIDTH - GameConfig.MAPOFFSETW; j++){
