@@ -24,7 +24,7 @@ public class TouchItem extends CollidableItem
   }
 
   public int getFlick(){
-    return mType;
+    return mType.ordinal();
   }
 }
 
