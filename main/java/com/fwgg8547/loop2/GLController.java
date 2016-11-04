@@ -37,7 +37,8 @@ BatModel.DirectionDetectListener
 	
 	private BlockModel mBlock;
 	private TouchModel mTouch;
-	private BlockGenerater mBlockGenerater;
+	//private BlockGenerater mBlockGenerater;
+ 	private BlockGenerater2 mBlockGenerater;
 	private ScrollManager mScrollManager;
 	private BatModel mBatt;
 	private WallModel2 mWall;
@@ -76,75 +77,27 @@ BatModel.DirectionDetectListener
 	@Override
 	public void onDown(PointF pos)
 	{
-		Lg.i(TAG, "ondown");
-		return ;
-		/*
-		if(mBatt.isDeleting()){
-			return;
-		}
-		
-		long diff = System.nanoTime() - mBatt.getLastUpdated().mLastUpdated;
-		float r =GameConfig.RDEGPERNANO*diff+mBatt.getLastUpdated().mAngle;
-		//Lg.w(TAG,"onDown angle = " + r + "|" + r2);
-		
-		DebugText.set("Touch : " + r);
-		ScrollManager.Direct d = getHitDirect(r);
-		Lg.i(TAG, "Hit DIRECT = " + d);
-		if(d == ScrollManager.Direct.NONE){
-			Lg.i(TAG, "Delete Batt");
-			mBatt.deleteItem((CollidableItem)mBatt.getItemArray().get(0), r);
-			return;
-		}else{
-			mAutoDirect = d;
-		}
-		
-		List<CollidableItem>cl =  mCollisitionManager.getCollisionItem((CollidableItem)mBatt.getItemArray().get(0));
-		if(cl.size() >= 2){
-			Lg.d(TAG, "hit block when touch " +cl.size());
-			int bcw = (pos.x < ScreenModel.getInstance().getWidth()/2)? -1:1;
-			mBatt.updatePositionRequest(d, bcw);
-			scroll(d);
-		} else {
-			Lg.i(TAG, "block < 2");
-			mBatt.deleteItem((CollidableItem)mBatt.getItemArray().get(0), r);
-			mAutoDirect = ScrollManager.Direct.NONE;
-		}
-		
-		Lg.i(TAG, "ondown end");
-		*/
+		Lg.i(TAG, "onDown " + pos.x + ":" + pos.y);
+		return;
 	}
 
 	@Override
 	public void onSingleTapUp(PointF pos)
 	{
-		// TODO: Implement this method
-		Lg.i(TAG, "onsingletapup end");
-	}
-	
-	private ScrollManager.Direct getHitDirect(float r){
-		if(r >= 90-GameConfig.HITRANGE && r < 90+GameConfig.HITRANGE){
-			return ScrollManager.Direct.UP;
-		} else if(r >= 180-GameConfig.HITRANGE && r < 180+GameConfig.HITRANGE){
-			return ScrollManager.Direct.LEFT;
-		} else if(r >= 270-GameConfig.HITRANGE && r < 270+GameConfig.HITRANGE){
-			return ScrollManager.Direct.DOWN;
-		} else if((r >= 0 && r < GameConfig.HITRANGE) || (r > 360-GameConfig.HITRANGE)){
-			return ScrollManager.Direct.RIGHT;
-		} else {
-			return ScrollManager.Direct.NONE;
-		}
+		Lg.i(TAG, "onSingleTapUp " + pos.x + ":" + pos.y);
+    return;
 	}
 	
 	@Override
-	public void onFling(PointF event1,PointF event2, float vx, float vy)
+	public void onFling(PointF pos1,PointF pos2, float vx, float vy)
 	{
-		
+		Lg.i(TAG, "onFling " + "pos1=" +pos1.x + ":" + pos1.y + " pos2= " + pos2.x + ":" + pos2.y);
+    return;
 	}
-
+  
 	@Override
 	public void onScroll(PointF pos1, PointF pos2, float x, float y)
 	{
-		// TODO: Implement this method
 		Lg.i(TAG, "scroll x y " + pos2.x + " ; " + pos2.y +";" +x+";"+y);
 		float l,t,r,b;
 		if(pos2.x < pos2.x + x) {
@@ -169,20 +122,20 @@ BatModel.DirectionDetectListener
 		}
 		
 		mTouch.createItemRequest(rect);
-		/*
-		List<CollidableItem> cl = mCollisitionManager.getCollisionItem(rect);
-		Lg.i(TAG, "get col");
-		Iterator<CollidableItem> ite = cl.iterator();
-		while(ite.hasNext()){
-			CollidableItem i = ite.next();
-			if(i instanceof BlockItem){
-				((BlockItem)i).select();
-			}
-			Lg.d(TAG,"hit " + i.mIndex);
+	}
+  
+	private ScrollManager.Direct getHitDirect(float r){
+		if(r >= 90-GameConfig.HITRANGE && r < 90+GameConfig.HITRANGE){
+			return ScrollManager.Direct.UP;
+		} else if(r >= 180-GameConfig.HITRANGE && r < 180+GameConfig.HITRANGE){
+			return ScrollManager.Direct.LEFT;
+		} else if(r >= 270-GameConfig.HITRANGE && r < 270+GameConfig.HITRANGE){
+			return ScrollManager.Direct.DOWN;
+		} else if((r >= 0 && r < GameConfig.HITRANGE) || (r > 360-GameConfig.HITRANGE)){
+			return ScrollManager.Direct.RIGHT;
+		} else {
+			return ScrollManager.Direct.NONE;
 		}
-		Lg.i(TAG, "finish");
-		
-	*/
 	}
 	
 	private BlockItem getCollisionItem(List<CollidableItem> cl, ScrollManager.Direct d){
@@ -260,8 +213,8 @@ BatModel.DirectionDetectListener
 	public void addGenerater(ItemGeneraterBase g)
 	{
 		super.addGenerater(g);
-		if(g instanceof BlockGenerater){
-			mBlockGenerater = (BlockGenerater)g;
+		if(g instanceof BlockGenerater2){
+			mBlockGenerater = (BlockGenerater2)g;
 		}
 	}
 

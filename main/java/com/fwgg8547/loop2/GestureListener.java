@@ -44,10 +44,9 @@ public class GestureListener extends GestureListenerBase
 	@Override
 	public boolean onDown(MotionEvent event)
 	{
-		super.onDown(event);
 		RectF screen = ScreenModel.getInstance().getScreenInfo();
 		float ty1 = screen.height() - event.getY();
-		Lg.i(TAG,"onDown "+event.getX()+"|"+ty1);
+		Lg.d(TAG,"onDown "+event.getX()+"|"+ty1);
 				
 		
 		if(mNE != null){
@@ -56,12 +55,10 @@ public class GestureListener extends GestureListenerBase
 		return false;
 	}
 
-	/*
 	@Override
 	public boolean onFling(MotionEvent event1, MotionEvent event2, float vx, float vy)
 	{
-		super.onFling(event1,event2,vx,vy);
-		Lg.i(TAG,"onFling " + vy);
+		Lg.d(TAG,"onFling " + vy);
 
 		RectF screen = ScreenModel.getInstance().getScreenInfo();
 		final float ty1 = screen.height() - event1.getY();
@@ -74,8 +71,6 @@ public class GestureListener extends GestureListenerBase
 		return false;
 	}
 
-	*/
-	
 	@Override
 	public boolean onSingleTapUp(MotionEvent p1)
 	{
@@ -90,37 +85,14 @@ public class GestureListener extends GestureListenerBase
 	}
 
 	@Override
-	public boolean onSingleTapConfirmed(MotionEvent e)
-	{
-		Lg.d(TAG, "onSingleTapConfirm");
-		return super.onSingleTapConfirmed(e);
-	}
-
-	@Override
-	public boolean onDoubleTapEvent(MotionEvent e)
-	{
-		Lg.d(TAG, "onDoubleTapEvent");
-		return super.onDoubleTapEvent(e);
-	}
-
-	@Override
-	public boolean onDoubleTap(MotionEvent e)
-	{
-		Lg.d(TAG, "onDouleTap");
-		return super.onDoubleTap(e);
-	}
-
-	@Override
 	public void onLongPress(MotionEvent p1)
 	{
-		Lg.i(TAG,"onLongPress");
-		super.onLongPress(p1);
+		Lg.d(TAG,"onLongPress");
 	}
 
 	@Override
 	public boolean onScroll(MotionEvent event1, MotionEvent event2, float dx, float dy)
 	{
-		super.onScroll(event1, event2, dx, dy);
 		Lg.d(TAG,"onScrool");
 		
 		RectF screen = ScreenModel.getInstance().getScreenInfo();
@@ -139,6 +111,5 @@ public class GestureListener extends GestureListenerBase
 	public void onShowPress(MotionEvent p1)
 	{
 		Lg.d(TAG, "onShowPress");
-		super.onShowPress(p1);
 	}
 }

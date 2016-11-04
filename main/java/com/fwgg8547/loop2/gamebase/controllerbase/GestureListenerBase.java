@@ -6,11 +6,12 @@ import com.fwgg8547.loop2.gamebase.sequencerbase.*;
 import com.fwgg8547.loop2.gamebase.modelbase.*;
 
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.graphics.RectF;
 import android.graphics.*;
 
-public class GestureListenerBase extends GestureDetector.SimpleOnGestureListener
+abstract public class GestureListenerBase implements GestureDetector.OnGestureListener
 {
 	public interface notifyEventListener {
 		public void onDown(PointF pos);
@@ -30,7 +31,7 @@ public class GestureListenerBase extends GestureDetector.SimpleOnGestureListener
 		mLock = null;
 		mNE = null;
 	}
-	
+
 	public void setListener(notifyEventListener ne){
 		mNE = ne;
 	}

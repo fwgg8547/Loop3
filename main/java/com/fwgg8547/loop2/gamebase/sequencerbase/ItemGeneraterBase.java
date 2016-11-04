@@ -138,8 +138,11 @@ abstract public class ItemGeneraterBase
 		}
 		return mLevelIndex+1;//level start 1
 	}
-	
+
+  // Load Sequence into mSq list
 	abstract public void loadSequence(Context ctx, int level);
+  // Load Level threshold list into mLevel
 	abstract public void loadLevel(Context ctx);
+  // Create Initial Item if needed
 	abstract public void createInitialItem();
 }

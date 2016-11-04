@@ -50,7 +50,7 @@ InnerEvent.Callback
 	private World mWorld;
 	
 	public GLControllerBase(Context ctx, 
-	GestureDetector.SimpleOnGestureListener listener,
+	GestureDetector.OnGestureListener listener,
 	CollisionManager cmg)
 	{
 		mContext = ctx;

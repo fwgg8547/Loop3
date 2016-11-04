@@ -193,7 +193,8 @@ public class BlockModel extends CollisionModel
 		}
 		return ib;		
 	}
-	
+
+  // Call from ItemGenerater
 	@Override
 	public ItemBase createItem(int pattern)
 	{
