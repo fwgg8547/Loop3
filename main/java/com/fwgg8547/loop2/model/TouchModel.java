@@ -56,10 +56,6 @@ public class TouchModel extends CollisionModel
 					freeItem(i);
 					i--; // mblock was reduced
 				}
-<<<<<<< HEAD
-=======
-
->>>>>>> aa490f0a0ff645b1d4409f76d3391b850b176882
 				itm.mIsDeleted = true;
 			}
 
