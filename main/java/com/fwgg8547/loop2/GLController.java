@@ -37,8 +37,8 @@ BatModel.DirectionDetectListener
 	
 	private BlockModel mBlock;
 	private TouchModel mTouch;
-	//private BlockGenerater mBlockGenerater;
- 	private BlockGenerater2 mBlockGenerater;
+	private BlockGenerater mBlockGenerater;
+ 	//private BlockGenerater2 mBlockGenerater;
 	private ScrollManager mScrollManager;
 	private BatModel mBatt;
 	private WallModel2 mWall;
@@ -273,8 +273,13 @@ BatModel.DirectionDetectListener
 	public void addGenerater(ItemGeneraterBase g)
 	{
 		super.addGenerater(g);
+		/*
 		if(g instanceof BlockGenerater2){
 			mBlockGenerater = (BlockGenerater2)g;
+		}
+		*/
+		if(g instanceof BlockGenerater){
+			mBlockGenerater = (BlockGenerater)g;
 		}
 	}
 

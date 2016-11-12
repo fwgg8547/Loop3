@@ -341,6 +341,9 @@ public class BlockModel extends CollisionModel
 				if(p.mTexturePattern != null){
 					it.setTexturePattern(p.mTexturePattern, 0,  null);
 				}
+				if(p.mRotatePattern != null){
+					it.setRotatePattern(p.mRotatePattern, null);
+				}
 				it.setAnimationValid(true);
 				it.moveAnimation(); // init 
 				it.updateVertix();

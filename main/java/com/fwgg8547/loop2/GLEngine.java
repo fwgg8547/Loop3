@@ -57,7 +57,8 @@ public class GLEngine extends GLEngineBase
 	public static final int TOUCHMODELINDX = BLOCKMODELINDX + 1; // 3
 	
 	private GLController mController;	
-	private BlockGenerater2 mBlockGenerater;
+//	private BlockGenerater2 mBlockGenerater;
+	private BlockGenerater mBlockGenerater;
 	private WallGenerater mWallGenerater;
 	private Score mScore;
 	
@@ -122,7 +123,7 @@ public class GLEngine extends GLEngineBase
 		BlockModel blm = new BlockModel();
 		blm.initialize(mLock, 100, null, PRIBLOCK);
 		ml.add(blm);
-		mBlockGenerater = new BlockGenerater2(blm);
+		mBlockGenerater = new BlockGenerater(blm);
 		mBlockGenerater.setAutoMode(true);
 		mBlockGenerater.loadSequence(mContext, 1);
 		mBlockGenerater.loadLevel(mContext);

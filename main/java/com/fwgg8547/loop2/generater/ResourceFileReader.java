@@ -178,7 +178,7 @@ public class ResourceFileReader
 			JSONArray array = obj.getJSONArray("Block");
 			if(array != null){
 				block = getItemPattern(array);
-				//block = getItemPatternBlock();
+				block = getItemPatternBlock(block);
 			}
 			
 			array = obj.getJSONArray("Ball");
@@ -230,6 +230,33 @@ public class ResourceFileReader
 				ip[indx].mInitPos = new PointF(j*battwidth+GameConfig.LEFTOFFSET, i*battwidth+GameConfig.BOTTOMOFFSET);
 				ip[indx].mMotionPattern = null;//mMotionPatternArray.get(1);
 				ip[indx].mRotatePattern = null;
+				ip[indx].mScalePattern = null;
+				ip[indx].mTexturePattern = mTexturePatternArray.get(0);
+				ip[indx].mRect = new RectF(
+				-blocksize/2f,-blocksize/2f,
+				 blocksize/2f, blocksize/2f);
+				ip[indx].mType = 0;
+				indx++;
+			}
+		}
+		
+		return ip;
+	}
+	
+	private ItemPattern[] getItemPatternBlock(ItemPattern[] p){
+		ItemPattern[] ip = new ItemPattern[GameConfig.MAPHEIGHT*GameConfig.MAPWIDTH];
+		float blocksize = GameConfig.BLOCKWIDTH;
+		float battwidth = GameConfig.WIDTH*2;
+		float pointsize = GameConfig.CENTEROFFSET*2;
+		float offset = battwidth*GameConfig.MAPOFFSETW*-1;
+    
+		int indx=0;
+		for(int i=0; i<GameConfig.MAPHEIGHT; i++){
+			for(int j = -GameConfig.MAPOFFSETW; j< GameConfig.MAPWIDTH - GameConfig.MAPOFFSETW; j++){
+				ip[indx] = new ItemPattern();
+				ip[indx].mInitPos = new PointF(j*battwidth+GameConfig.LEFTOFFSET, i*battwidth+GameConfig.BOTTOMOFFSET);
+				ip[indx].mMotionPattern = null;//mMotionPatternArray.get(1);
+				ip[indx].mRotatePattern =p[0].mRotatePattern ;
 				ip[indx].mScalePattern = null;
 				ip[indx].mTexturePattern = mTexturePatternArray.get(0);
 				ip[indx].mRect = new RectF(
