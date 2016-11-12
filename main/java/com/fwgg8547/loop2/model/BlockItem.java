@@ -91,11 +91,14 @@ public class BlockItem extends CollidableItem
 		return mIsSelect;
 	}
 
-  public void attack(int i){
+  public boolean attack(int i){
+		boolean res = false;
     Type t = convInt2Type(i);
     if (mType == t){
       select();
+			res = true;
     }
+		return res;
   }
 
   private Type convInt2Type(int i){

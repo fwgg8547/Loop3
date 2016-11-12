@@ -92,7 +92,7 @@ BatModel.DirectionDetectListener
 			return;
 		}
 		
-		mTouch.createItemRequest(rect, TouchItem.FlickType.CENTER);
+		mTouch.createItemRequest(pos, new PointF(pos.x+1, pos.y+1), TouchItem.FlickType.CENTER);
     return;
 	}
 	
@@ -101,6 +101,7 @@ BatModel.DirectionDetectListener
 	{
 		Lg.i(TAG, "onFling " + "pos1=" +pos1.x + ":" + pos1.y + " pos2= " + pos2.x + ":" + pos2.y);
 		RectF rect;
+		PointF p1,p2;
     TouchItem.FlickType t;
     float dx = pos2.x - pos1.x;
     float dy = pos2.y - pos1.y;
@@ -109,9 +110,9 @@ BatModel.DirectionDetectListener
       if (dx*dx > dy*dy) {
         t = TouchItem.FlickType.RIGHT;
         if (pos1.y > pos2.y) {
-          rect = new RectF(pos1.x, pos1.y, pos2.x, pos2.y);
-        } else {
           rect = new RectF(pos1.x, pos2.y, pos2.x, pos1.y);
+        } else {
+          rect = new RectF(pos1.x, pos1.y, pos2.x, pos2.y);
         }
       } else {
         if (dy >= 0) {
@@ -129,9 +130,9 @@ BatModel.DirectionDetectListener
       if (dx*dx > dy*dy) {
         t = TouchItem.FlickType.LEFT;
         if (pos1.y > pos2.y) {
-          rect = new RectF(pos2.x, pos1.y, pos1.x, pos2.y);
-        } else {
           rect = new RectF(pos2.x, pos2.y, pos1.x, pos1.y);
+        } else {
+          rect = new RectF(pos2.x, pos1.y, pos1.x, pos2.y);
         }
         
       } else {
@@ -148,7 +149,7 @@ BatModel.DirectionDetectListener
 			return;
 		}
 		
-		mTouch.createItemRequest(rect, t);
+		mTouch.createItemRequest(pos1, pos2, t);
     return;
 	}
   

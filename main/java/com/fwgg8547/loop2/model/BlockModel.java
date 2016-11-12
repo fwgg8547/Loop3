@@ -151,8 +151,11 @@ public class BlockModel extends CollisionModel
 	}
 
   public void attack(BlockItem item, int t){
+		Lg.i(TAG,"attack " + t);
     if(item != null){
-      item.attack(t);
+      if(item.attack(t)){
+				deleteItem(item);
+			}
     }
   }
   
@@ -207,6 +210,7 @@ public class BlockModel extends CollisionModel
 		try{
 			mLock.writeLock();
 			ib = (BlockItem)super.createItem();
+			ib.setType(GLEngine.BLOCKMODELINDX);
 			//ib.setType(pattern);
 			ItemPattern p = ResourceFileReader.getPattern(ResourceFileReader.Type.Block,pattern);
 			mGenerater.createItem(ib, p);
@@ -219,6 +223,18 @@ public class BlockModel extends CollisionModel
 		return ib;
 	}
 
+	public void deleteItem(BlockItem itm){
+		try{
+			Lg.i(TAG, "delete items");
+			mLock.writeLock();
+			itm.mIsDeleted = true;
+		} catch(Exception e){
+			Lg.e(TAG, e.toString());
+		} finally{
+			mLock.writeUnlock();
+		}
+	}
+	
 	public void deleteItem(List<BlockItem> list){
 		try{
 			Lg.i(TAG, "delete items");
@@ -238,7 +254,7 @@ public class BlockModel extends CollisionModel
 	@Override
 	public int getTextureId()
 	{
-		return R.drawable.circle;
+		return R.drawable.ic_launcher;
 	}
 
 	@Override
