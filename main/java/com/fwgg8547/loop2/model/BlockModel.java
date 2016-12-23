@@ -96,7 +96,9 @@ public class BlockModel extends CollisionModel
 				}
 				
 				if(itm.isSelect()){
-					itm.changeColor();
+					//itm.changeColor();
+					itm.changeFigure();
+					
 				} else {
 					bIsAllItemSelected = false;
 				}
@@ -154,14 +156,17 @@ public class BlockModel extends CollisionModel
 		Lg.i(TAG,"attack " + t);
     if(item != null){
       if(item.attack(t)){
-				deleteItem(item);
+				Lg.i(TAG, "attack");
+				//deleteItem(item);
 			}
     }
   }
   
   public void select(BlockItem item){
+		Lg.i(TAG,"block select");
     if(item != null) {
       item.select(true);
+			
     }
   }
 	
@@ -298,6 +303,38 @@ public class BlockModel extends CollisionModel
 		}
 	}
 
+	public void changeRotate(RotateSequence[] rs)
+	{
+		if(mMoveChecker.isMoving()){
+			Lg.w(TAG, "changeMotion failed. now moving");
+			return;
+		}
+		try{
+			mLock.writeLock();
+			mMoveChecker.setMoving(true);
+			RotateSequence[] next = rs;
+			ItemBase itm = null;
+			for(int i=0; i<mItemList.size();i++){
+				itm = mItemList.get(i);
+				itm.setRotatePattern(next,
+
+					new AnimationSequencer.Callback(){
+						public void notify(ItemBase i, int type){
+							if(type == 0) {
+								Lg.d(TAG, "change motion callback");
+								mMoveChecker.setMoving(false);
+							}
+						}
+					}
+				);
+			}
+		} catch(Exception e){
+			Lg.e(TAG,e.toString());
+		} finally {
+			mLock.writeUnlock();
+		}
+	}
+	
 	public class Generater {
 		
 		private int mOffset;
@@ -321,17 +358,36 @@ public class BlockModel extends CollisionModel
 		public BlockItem createItem(BlockItem i, ItemPattern p){
 			BlockItem it = i;
 			try {
-				Sprite s = new Sprite(mOffset + mCurr);
+				WallSprite s = new WallSprite(mOffset + mCurr);
+				//Sprite s = new Sprite(mOffset + mCurr);
 				it.setId(mOffset+mCurr);
 				it.setSprite(s);
 				
+				
+				if(p.mRect != null){
+					//it.setRect(p.mRect);
+					
+					it.setQuadrilateral(new Quadrilateral(
+					/*
+																new PointF(p.mRect.right, p.mRect.bottom) ,
+																new PointF(p.mRect.left, p.mRect.bottom),
+																new PointF(p.mRect.left, p.mRect.top),
+																new PointF(p.mRect.right, p.mRect.top)
+															
+					*/
+																new PointF(p.mRect.left, p.mRect.top) ,
+																new PointF(p.mRect.right, p.mRect.top),
+																new PointF(p.mRect.right, p.mRect.bottom),
+																new PointF(p.mRect.left, p.mRect.bottom)
+					));
+					
+				}
+				
 				if(p.mInitPos != null){
-					it.setPosition(p.mInitPos.x, p.mInitPos.y, 0.0f, 0.0f);
+					it.setPositionDelta(p.mInitPos.x, p.mInitPos.y);
 					it.setAngleCenter(p.mInitPos.x, p.mInitPos.y);
 				}
-				if(p.mRect != null){
-					it.setRect(p.mRect);
-				}
+				
 				if(p.mMotionPattern != null){
 					it.setMotionPattern(p.mMotionPattern, null);
 				}

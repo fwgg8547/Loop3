@@ -127,10 +127,13 @@ extends ItemGeneraterBase
 		mBlockMap2.setRight(tmpR);
 	}
 
+	private void createBoard2(){
+		mBlockModel.createItem(0);
+	}
 	@Override
 	public void createInitialItem()
 	{
-		createBoard();
+		createBoard2();
 		mIsReady=true;
 	}
 	

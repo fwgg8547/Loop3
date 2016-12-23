@@ -6,13 +6,32 @@ import android.graphics.*;
 
 public class WallSprite extends SpriteBase
 {		
+
+	private static final String TAG = WallSprite.class.getSimpleName();
+	
 	private Vec2[] vector;
+	private PointF tempPos;
 	private final static short[] indices = new short[] {0, 1, 2, 0, 2, 3};
 	
 	public WallSprite(int i){
 		super(i, 1);
+		tempPos = new PointF(0f,0f);
+		angle = 0f;
 	}
 		
+	public void clear(){
+		tempPos = null;
+		vector = null;
+		super.clear();
+	}
+	
+	
+	public void translateTemp(float dx, float dy){
+		tempPos.x = dx;
+		tempPos.y = dy;
+		mDirty = true;
+	}
+	
 	protected void doConvrrt(){	
 		float r1, r2, l1, l2 , t, b;
 		if(mQuad == null){
@@ -140,4 +159,6 @@ public class WallSprite extends SpriteBase
 	public void setColor(float[] clr){
 		color = clr;
 	}
+	
+	
 }

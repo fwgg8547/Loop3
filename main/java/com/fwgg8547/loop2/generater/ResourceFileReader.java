@@ -112,6 +112,10 @@ public class ResourceFileReader
 		return mMotionPatternArray.get(id);
 	}
 	
+	public static RotateSequence[] getRotatePattern(int id){
+		return mRotatePatternArray.get(id);
+	}
+	
 	public static float[] getUv(int div){
 		return mTexturePatternArray.get(0)[0].uv;
 	}
@@ -178,7 +182,7 @@ public class ResourceFileReader
 			JSONArray array = obj.getJSONArray("Block");
 			if(array != null){
 				block = getItemPattern(array);
-				block = getItemPatternBlock(block);
+				block = getItemPatternBlock2(block);
 			}
 			
 			array = obj.getJSONArray("Ball");
@@ -256,17 +260,38 @@ public class ResourceFileReader
 				ip[indx] = new ItemPattern();
 				ip[indx].mInitPos = new PointF(j*battwidth+GameConfig.LEFTOFFSET, i*battwidth+GameConfig.BOTTOMOFFSET);
 				ip[indx].mMotionPattern = null;//mMotionPatternArray.get(1);
-				ip[indx].mRotatePattern =p[0].mRotatePattern ;
+				ip[indx].mRotatePattern = p[0].mRotatePattern ;
 				ip[indx].mScalePattern = null;
 				ip[indx].mTexturePattern = mTexturePatternArray.get(0);
+				ip[indx].mRect = p[0].mRect;
+				/*
 				ip[indx].mRect = new RectF(
 				-blocksize/2f,-blocksize/2f,
 				 blocksize/2f, blocksize/2f);
+				 */
 				ip[indx].mType = 0;
 				indx++;
 			}
 		}
 		
+		return ip;
+	}
+	
+	private ItemPattern[] getItemPatternBlock2(ItemPattern[] p){
+		ItemPattern[] ip = new ItemPattern[1];
+		
+		int indx=0;
+				ip[indx] = new ItemPattern();
+				ip[indx].mInitPos = new PointF(500, 1000);
+				ip[indx].mMotionPattern = null;//mMotionPatternArray.get(1);
+				ip[indx].mRotatePattern = p[0].mRotatePattern ;
+				ip[indx].mScalePattern = null;
+				ip[indx].mTexturePattern = mTexturePatternArray.get(0);
+				ip[indx].mRect = p[0].mRect;
+
+				ip[indx].mType = 0;
+				indx++;
+
 		return ip;
 	}
 	

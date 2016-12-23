@@ -31,7 +31,8 @@ extends GLControllerBase
 implements GestureListenerBase.notifyEventListener, 
 ScoreBase.NotifyScore,
 SequencerBase.Callback,
-BatModel.DirectionDetectListener
+BatModel.DirectionDetectListener,
+TouchModel.CreateCallback
 {
 	private final static String TAG = GLController.class.getSimpleName();
 	
@@ -48,6 +49,8 @@ BatModel.DirectionDetectListener
 	private ScrollManager.Direct mAutoDirect;
 	private boolean mIsFirstUpdate;
 	private boolean mIsReady;
+	private TouchItem mTouchItem;
+	private BlockItem mSelectedBlock;
 	
 	public GLController(Context ctx, GestureListener gl, CollisionManager cmg)
 	{
@@ -66,8 +69,16 @@ BatModel.DirectionDetectListener
 		mScrollManager = new ScrollManager();
 		mIsReady = false;
 		mAutoDirect = ScrollManager.Direct.NONE;
+		mTouchItem = null;
 	}
 
+	@Override
+	public void created(TouchItem item)
+	{
+		Lg.i(TAG,"Created !");
+		mTouchItem = item;
+	}
+	
 	@Override
 	public void levelChanged(int newLevel)
 	{
@@ -78,6 +89,10 @@ BatModel.DirectionDetectListener
 	public void onDown(PointF pos)
 	{
 		Lg.i(TAG, "onDown " + pos.x + ":" + pos.y);
+		
+		RectF rect = new RectF(0, 0, 10, 10);
+		
+		mTouch.createItemRequest(rect, pos,this);
 		return;
 	}
 
@@ -88,11 +103,7 @@ BatModel.DirectionDetectListener
 		RectF rect = new RectF(pos.x, pos.y,
                            pos.x+1, pos.y+1);
 		
-		if(mTouch == null){
-			return;
-		}
-		
-		mTouch.createItemRequest(pos, new PointF(pos.x+1, pos.y+1), TouchItem.FlickType.CENTER);
+	releaseSelected();
     return;
 	}
 	
@@ -100,6 +111,8 @@ BatModel.DirectionDetectListener
 	public void onFling(PointF pos1,PointF pos2, float vx, float vy)
 	{
 		Lg.i(TAG, "onFling " + "pos1=" +pos1.x + ":" + pos1.y + " pos2= " + pos2.x + ":" + pos2.y);
+		releaseSelected();
+		/*
 		RectF rect;
 		PointF p1,p2;
     TouchItem.FlickType t;
@@ -150,6 +163,7 @@ BatModel.DirectionDetectListener
 		}
 		
 		mTouch.createItemRequest(pos1, pos2, t);
+		*/
     return;
 	}
   
@@ -157,6 +171,12 @@ BatModel.DirectionDetectListener
 	public void onScroll(PointF pos1, PointF pos2, float x, float y)
 	{
 		Lg.i(TAG, "scroll x y " + pos2.x + " ; " + pos2.y +";" +x+";"+y);
+		if(mTouchItem != null){
+			mTouchItem.setPosition(pos2.x, pos2.y, 0, 0);
+		}
+		if(mSelectedBlock != null){
+			mSelectedBlock.setNextTop(mTouchItem.getPosition());
+		}
     /*
 		float l,t,r,b;
 		if(pos2.x < pos2.x + x) {
@@ -180,8 +200,21 @@ BatModel.DirectionDetectListener
 			return;
 		}
 		
-		mTouch.createItemRequest(rect);
+		
     */
+	}
+	
+	private void releaseSelected(){
+		if(mTouch != null){
+			mTouch.deleteAll();
+			mTouchItem = null;
+		}
+
+		if(mSelectedBlock != null){
+			mSelectedBlock.select(false);
+			mSelectedBlock = null;
+		}
+		
 	}
   
 	private ScrollManager.Direct getHitDirect(float r){
@@ -286,6 +319,9 @@ BatModel.DirectionDetectListener
 	@Override
 	public boolean broadCollision(ItemBase item1, ItemBase item2)
 	{
+		if((item1.getType() == item2.getType())){
+			return false;
+		}
 		return true;
 	}
 
@@ -295,11 +331,16 @@ BatModel.DirectionDetectListener
     Lg.i(TAG, "item type " + item1.getType() + " : " + item2.getType());
     if((item1.getType() == GLEngine.TOUCHMODELINDX) &&
        (item2.getType() == GLEngine.BLOCKMODELINDX)){
-      //mBlock.select((BlockItem)item2);
-      mBlock.attack((BlockItem)item2, ((TouchItem)item1).getFlick());
+      
+			mSelectedBlock = (BlockItem)item2;
+			mSelectedBlock.select(true);
+      //mBlock.attack((BlockItem)item2, ((TouchItem)item1).getFlick());
+			
     } else if((item2.getType() == GLEngine.TOUCHMODELINDX) &&
               (item1.getType() == GLEngine.BLOCKMODELINDX)){
-      mBlock.attack((BlockItem)item1, ((TouchItem)item2).getFlick());
+				mSelectedBlock = (BlockItem)item1;
+				mSelectedBlock.select(true);
+      //mBlock.attack((BlockItem)item1, ((TouchItem)item2).getFlick());
     }
     
 		return false;

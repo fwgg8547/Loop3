@@ -82,6 +82,10 @@ abstract public class SpriteBase
 		mDirty = true;
 	}
 	
+	public Quadrilateral getQuad(){
+		return mQuad;
+	}
+	
 	public PointF translate(float x, float y)
 	{
 		// Update our location.

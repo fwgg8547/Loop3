@@ -50,7 +50,7 @@ public class GestureListener extends GestureListenerBase
 				
 		
 		if(mNE != null){
-			mNE.onDown(new PointF(event.getX(), event.getY()));
+			mNE.onDown(new PointF(event.getX(), ty1));
 		}
 		return false;
 	}

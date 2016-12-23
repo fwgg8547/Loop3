@@ -191,13 +191,14 @@ public class CollidableItem extends ItemBase implements ScrollableItem
 		
 		mBodyType = BodyType.Quadrilateral;
 		mBody.removeAllFixtures();
-		mBody.addFixture(Geometry.createPolygon(
-											 new Vector2(q.topleft.x, q.topleft.y),
-											 new Vector2(q.topright.x, q.topright.y),
-											 new Vector2(q.bottomright.x, q.bottomright.y),
-											 new Vector2(q.bottomleft.x, q.bottomleft.y)
-										 ));		
-		mBody.setMass(MassType.NORMAL);
+		BodyFixture bf = new BodyFixture(Geometry.createPolygon(
+																			 new Vector2(q.topleft.x, q.topleft.y),
+																			 new Vector2(q.topright.x, q.topright.y),
+																			 new Vector2(q.bottomright.x, q.bottomright.y),
+																			 new Vector2(q.bottomleft.x, q.bottomleft.y)
+																		 ));
+		mBody.addFixture(bf);		
+		//mBody.setMass(MassType.NORMAL);
 		
 	}
 

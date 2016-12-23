@@ -8,11 +8,11 @@ public class TouchItem extends CollidableItem
 	private FlickType mType;
   
 	public enum FlickType{
-        TOP,
-        BOTTOM,
+    TOP,
+    BOTTOM,
 		RIGHT,
 		LEFT,
-        CENTER
+    CENTER
 	}
   
 	public TouchItem(){
@@ -26,5 +26,7 @@ public class TouchItem extends CollidableItem
   public int getFlick(){
     return mType.ordinal();
   }
+	
+	
 }
 

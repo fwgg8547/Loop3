@@ -1,14 +1,20 @@
 package com.fwgg8547.loop2.model;
 
 import com.fwgg8547.loop2.gamebase.modelbase.CollidableItem;
-
+import com.fwgg8547.loop2.gamebase.sequencerbase.*;
+import android.graphics.*;
+import com.fwgg8547.loop2.gamebase.modelbase.*;
 public class BlockItem extends CollidableItem
 {
 	private static final String TAG = BlockItem.class.getSimpleName();
 	private static final float[] SELECTED = new float[]{1,1,0,1};
 	private static final float[] UNSELECTED = new float[]{1,1,1,1};
+	private static final RotateSequence[] RIGHT = new RotateSequence[]{
+		new RotateSequence(360, 10)
+	};
 	private Type mType;
 	private boolean mIsSelect;
+	private Quadrilateral mNewQuad;
 	
 	public enum Type{
     TOP,
@@ -21,6 +27,25 @@ public class BlockItem extends CollidableItem
 	public BlockItem(){
 		super();
 		mIsSelect = false;
+	}
+	
+	public void setNextTop(PointF pos){
+		Quadrilateral o = mSprite.getQuad();
+		PointF opos = getPosition();
+		mNewQuad = new Quadrilateral(
+		new PointF(o.topleft.x, o.topleft.y),
+		new PointF(o.topright.x, o.topright.y),
+			new PointF(o.bottomright.x, pos.y-opos.y),
+			new PointF(o.bottomleft.x, pos.y-opos.y)
+		);
+	}
+	
+	public void  setNextBottom(PointF bottomleft, PointF bottomright){
+		
+	}
+	
+	public void execConv(){
+	 setQuadrilateral(mNewQuad);
 	}
 	
 	public void setBlockType(int t){
@@ -67,11 +92,21 @@ public class BlockItem extends CollidableItem
 		return mType;
 	}
 	
-	public void changeColor(){
-		mSprite.setColor(SELECTED);
+	public void changeFigure(){
+		if(mNewQuad != null){
+			setQuadrilateral(mNewQuad);
+			mNewQuad = null;
+		}
 		mIsSelect = false;
 	}
 	
+	public void changeColor(){
+		mSprite.setColor(SELECTED);
+		
+		//setRotatePattern(RIGHT,null);
+		mIsSelect = false;
+	}
+	/*
 	public void select(){
 		mIsSelect = true;
 		if(mIsSelect){
@@ -79,9 +114,8 @@ public class BlockItem extends CollidableItem
 		} else{
 			mSprite.setColor(UNSELECTED);
 		}
-		
 	}
-	
+	*/
 	public void select(boolean b){
 		mIsSelect = b;
 		//mSprite.setColor(SELECTED);
@@ -95,7 +129,7 @@ public class BlockItem extends CollidableItem
 		boolean res = false;
     Type t = convInt2Type(i);
     if (mType == t){
-      select();
+      select(true);
 			res = true;
     }
 		return res;

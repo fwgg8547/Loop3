@@ -28,7 +28,7 @@ public class GameConfig
 	// Bat define
 	// see also pattern.txt
 	public static final float CENTEROFFSET = 80;
-	public static final float WIDTH = 90;
+	public static final float WIDTH = 200;
 	public static final float DIFF = WIDTH -CENTEROFFSET;
 	public static final float HEIGHT = (float)(WIDTH*Math.sin(Math.toRadians(HITRANGE)));
 	public static final float AUTOHITRANGE = 5;

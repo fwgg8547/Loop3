@@ -31,16 +31,21 @@ public class TouchModel extends CollisionModel
 	private boolean mDeleting;
 	private PendingRequest mPending;
 
+	public interface CreateCallback{
+		public void created(TouchItem item);
+	}
   
 	public class PendingRequest {
 		public RectF mRect;
 		public PointF mPos1;
 		public PointF mPos2;
 		public TouchItem.FlickType mType;
-    
-		public PendingRequest(RectF r, TouchItem.FlickType t){
+    public CreateCallback mCb;
+		public PendingRequest(RectF r, PointF pos,CreateCallback cb){
 			mRect = r;
-      mType = t;
+			mPos1 = pos;
+      mType = TouchItem.FlickType.CENTER;
+			mCb = cb;
 		}
 		
 		public PendingRequest(PointF p1, PointF p2, TouchItem.FlickType t){
@@ -97,7 +102,14 @@ public class TouchModel extends CollisionModel
 		}
 		
 		if(mPending != null){
-			createItem(mPending.mPos1, mPending.mPos2, mPending.mType);
+			if(mPending.mType == TouchItem.FlickType.CENTER){
+				TouchItem itm = createItem(mPending.mRect, mPending.mPos1.x,mPending.mPos1.y,mPending.mType);
+				if(mPending.mCb != null){
+					mPending.mCb.created(itm);
+				}
+			} else{
+				createItem(mPending.mPos1, mPending.mPos2, mPending.mType);
+			}
 			mPending = null;
 		}
 	}
@@ -135,19 +147,66 @@ public class TouchModel extends CollisionModel
 		return ;
 	}
 
+	public void createItemRequest(RectF rect, PointF pos, CreateCallback cb)
+	{
+		// TODO: Implement this method
+		if(mPending == null){
+			mPending = new PendingRequest(rect, pos,cb);
+		}
+		return ;
+	}
+	
 	@Override
 	public ItemBase createItem(int pattern)
 	{
 		return createItem(pattern, new PointF(), new PointF(), TouchItem.FlickType.CENTER);
 	}
 
-	public ItemBase createItem(PointF p1, PointF p2, TouchItem.FlickType t)
+	public TouchItem createItem(PointF p1, PointF p2, TouchItem.FlickType t)
 	{
 		// TODO: Implement this method
-		return createItem(0,p1,p2,t);
+		return (TouchItem)createItem(0,p1,p2,t);
 	}
 
-	//public ItemBase createItem(int pattern, RectF rect, TouchItem.FlickType type)
+	public TouchItem createItem(RectF rect, float x, float y,TouchItem.FlickType t)
+	{
+		// TODO: Implement this method
+		return createItem(0, rect, x, y, t);
+	}
+	
+	public TouchItem createItem(int pattern, RectF rect, float x,float y, TouchItem.FlickType type){
+		TouchItem it = null;
+		try{
+			mLock.writeLock();
+
+			it = (TouchItem)super.createItem();
+			if(it == null){
+				return null;
+			}
+			
+			it.setType(GLEngine.TOUCHMODELINDX);
+			Sprite s = new Sprite(mIdOffset + mIdCurr);
+			s.setTextureUv(ResourceFileReader.getUv(0));
+			it.setId(mIdOffset+mIdCurr);
+			Lg.i(TAG, "touch item created id= " + it.getId());
+			mIdCurr++;
+			it.setSprite(s);
+			it.setPosition(x, y, 0.0f, 0.0f);
+			it.setRect(rect);
+			//it.setQuadrilateral(q);
+			it.setColor(new float[]{0,1,1,1});
+      it.setFlickType(type);
+			it.mIsDeleted = false;
+			
+		} catch (Exception e){
+			Lg.w(TAG,e.toString());
+		} finally {
+			mLock.writeUnlock();
+		}
+
+		return it;
+	}
+	
 	public ItemBase createItem(int pattern, PointF p1, PointF p2, TouchItem.FlickType type)
 	{		
 		TouchItem it = null;
@@ -228,6 +287,21 @@ public class TouchModel extends CollisionModel
 	}
 
 
+	public void deleteAll(){
+		
+	try{
+		mLock.writeLock();
+		for(int i=0; i<mItemList.size();i++){
+			ItemBase itm = mItemList.get(i);
+			itm.mIsDeleted = true;
+		}
+	} catch(Exception e){
+		Lg.e(TAG,"err touch delete all");
+	} finally {
+		mLock.writeUnlock();
+	}
+	}
+	
 	public void deleteItem(CollidableItem it, float r){
 		ItemPattern p = ResourceFileReader.getPattern(ResourceFileReader.Type.Batt, 1);
 		float rad = (float)Math.toRadians(r);
