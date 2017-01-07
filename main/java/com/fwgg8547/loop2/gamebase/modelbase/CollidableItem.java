@@ -241,6 +241,9 @@ public class CollidableItem extends ItemBase implements ScrollableItem
 			mSprite.setTextureUv(tmp3);
 		}
 		
+		if(mani){
+			
+		}
 		return pos;
 	}
 	

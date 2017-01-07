@@ -20,9 +20,14 @@ public class AnimationSequencer
 	private ItemBase mOwnerItem;
 	private CurrentFrame mAnimFrame;
 	
+	public interface ScaleFunc  {
+		abstract public Vec2 nextScale();
+	}
+	
 	public interface Callback{
 		abstract public void notify(ItemBase i, int type);
 	}
+	
 	
 	public static class CurrentFrame {
 		public int mtick;

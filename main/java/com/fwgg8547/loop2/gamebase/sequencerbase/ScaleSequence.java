@@ -6,11 +6,18 @@ public class ScaleSequence
 	public float scalex;
 	public float scaley;
 
+	public enum Type {
+		Fixed,
+		Func
+	}
+	
 	public ScaleSequence(){}
 	
-	public ScaleSequence(int frame, float scalex, float scaley){
+	public ScaleSequence(Type type, int frame, float scalex, float scaley){
 		this.frame = frame;
 		this.scalex = scalex;
 		this.scaley = scaley;
 	}
+	
+	
 }
