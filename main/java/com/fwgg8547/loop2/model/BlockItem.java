@@ -2,20 +2,28 @@ package com.fwgg8547.loop2.model;
 
 import com.fwgg8547.loop2.gamebase.modelbase.CollidableItem;
 import com.fwgg8547.loop2.gamebase.sequencerbase.*;
-import android.graphics.*;
 import com.fwgg8547.loop2.gamebase.modelbase.*;
+import com.fwgg8547.loop2.gamebase.util.*;
+import com.fwgg8547.loop2.anim.*;
+
+import android.graphics.*;
+
 public class BlockItem extends CollidableItem
 {
 	private static final String TAG = BlockItem.class.getSimpleName();
 	private static final float[] SELECTED = new float[]{1,1,0,1};
 	private static final float[] UNSELECTED = new float[]{1,1,1,1};
+
 	private static final RotateSequence[] RIGHT = new RotateSequence[]{
 		new RotateSequence(360, 10)
 	};
+
 	private Type mType;
 	private boolean mIsSelect;
 	private Quadrilateral mNewQuad;
-	
+  private Quadrilateral mInitQuad;
+  private SpringAnim mSpringAnim;
+
 	public enum Type{
     TOP,
     BOTTOM,
@@ -97,28 +105,24 @@ public class BlockItem extends CollidableItem
 			setQuadrilateral(mNewQuad);
 			mNewQuad = null;
 		}
-		mIsSelect = false;
 	}
 	
 	public void changeColor(){
 		mSprite.setColor(SELECTED);
-		
-		//setRotatePattern(RIGHT,null);
 		mIsSelect = false;
 	}
-	/*
-	public void select(){
-		mIsSelect = true;
-		if(mIsSelect){
-			mSprite.setColor(SELECTED);
-		} else{
-			mSprite.setColor(UNSELECTED);
-		}
-	}
-	*/
+
 	public void select(boolean b){
-		mIsSelect = b;
-		//mSprite.setColor(SELECTED);
+    if (b != mIsSelect) {
+      mIsSelect = b;
+      if (b) {
+        // select
+        mInitQuad = mSprite.getQuad();
+      } else {
+        // release
+        mNewQuad = mInitQuad;
+      }
+    }
 	}
 	
 	public boolean isSelect(){
@@ -134,7 +138,7 @@ public class BlockItem extends CollidableItem
     }
 		return res;
   }
-
+  
   private Type convInt2Type(int i){
     Type t;
     switch(i) {

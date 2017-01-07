@@ -42,6 +42,7 @@ InnerEvent.Callback
 	protected Context mContext;
 	protected CollisionManager mCollisitionManager;
 	private GestureDetector mGestureDetector;
+  private GestureListenerBase mGestureListenerBase;
 	private List<ModelBase> mModels;
 	protected List<CollisionModel> mCollisionModels;
 	protected List<Callback> mCallbacks;
@@ -50,13 +51,14 @@ InnerEvent.Callback
 	private World mWorld;
 	
 	public GLControllerBase(Context ctx, 
-	GestureDetector.OnGestureListener listener,
+	GestureListenerBase listener,
 	CollisionManager cmg)
 	{
 		mContext = ctx;
 		mModels = new ArrayList<ModelBase>();
 		mCollisionModels = new ArrayList<CollisionModel>();
 		mCollisitionManager = cmg;
+	    mGestureListenerBase = listener;
 		mGestureDetector = new GestureDetector(ctx, listener);
 		mCallbacks = new ArrayList<Callback>();
 		InnerEvent.register(this);
@@ -75,6 +77,8 @@ InnerEvent.Callback
 		if(mGestureDetector != null){
 			if(event.getAction() == MotionEvent.ACTION_UP){
 				Lg.i(TAG, "OnUpEvent");
+        		mGestureListenerBase.onUp(event);
+        		return true;
 			}
 			mGestureDetector.onTouchEvent(event);
 		}

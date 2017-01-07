@@ -96,14 +96,20 @@ TouchModel.CreateCallback
 		return;
 	}
 
+  @Override
+  public void onUp(PointF pos) {
+    Lg.i(TAG, "onDown " + pos.x + ":" + pos.y);
+    releaseSelected();
+    return;
+  }
+  
 	@Override
 	public void onSingleTapUp(PointF pos)
 	{
 		Lg.i(TAG, "onSingleTapUp " + pos.x + ":" + pos.y);
 		RectF rect = new RectF(pos.x, pos.y,
                            pos.x+1, pos.y+1);
-		
-	releaseSelected();
+    releaseSelected();
     return;
 	}
 	
@@ -177,31 +183,6 @@ TouchModel.CreateCallback
 		if(mSelectedBlock != null){
 			mSelectedBlock.setNextTop(mTouchItem.getPosition());
 		}
-    /*
-		float l,t,r,b;
-		if(pos2.x < pos2.x + x) {
-			l=pos2.x;
-			r=pos2.x+x+1;
-		} else{
-			l=pos2.x+x;
-			r=pos2.x+1;
-		}
-		if(pos2.y < pos2.y+y){
-			t=pos2.y;
-			b=pos2.y+y+1;
-		} else{
-			t=pos2.y+y;
-			b=pos2.y+1;
-		}
-		
-		RectF rect = new RectF(l,t,r,b);
-		
-		if(mTouch == null){
-			return;
-		}
-		
-		
-    */
 	}
 	
 	private void releaseSelected(){
@@ -328,19 +309,16 @@ TouchModel.CreateCallback
 	@Override
 	public boolean narrowCollision(ItemBase item1, ItemBase item2)
 	{
-    Lg.i(TAG, "item type " + item1.getType() + " : " + item2.getType());
+    Lg.d(TAG, "item type " + item1.getType() + " : " + item2.getType());
     if((item1.getType() == GLEngine.TOUCHMODELINDX) &&
        (item2.getType() == GLEngine.BLOCKMODELINDX)){
       
 			mSelectedBlock = (BlockItem)item2;
 			mSelectedBlock.select(true);
-      //mBlock.attack((BlockItem)item2, ((TouchItem)item1).getFlick());
-			
     } else if((item2.getType() == GLEngine.TOUCHMODELINDX) &&
               (item1.getType() == GLEngine.BLOCKMODELINDX)){
 				mSelectedBlock = (BlockItem)item1;
 				mSelectedBlock.select(true);
-      //mBlock.attack((BlockItem)item1, ((TouchItem)item2).getFlick());
     }
     
 		return false;

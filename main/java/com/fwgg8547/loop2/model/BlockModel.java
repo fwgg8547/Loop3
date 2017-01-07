@@ -78,7 +78,7 @@ public class BlockModel extends CollisionModel
 	public void onUpdate()
 	{
 		Lg.a(TAG, "update");
-		boolean bIsAllItemSelected = true;
+		boolean bIsAllItemSelected = false;
 		try{
 			mLock.writeLock();
 			for(int i=0; i<mItemList.size();i++){
@@ -95,13 +95,7 @@ public class BlockModel extends CollisionModel
 					itm.mIsDeleted = true;
 				}
 				
-				if(itm.isSelect()){
-					//itm.changeColor();
-					itm.changeFigure();
-					
-				} else {
-					bIsAllItemSelected = false;
-				}
+				itm.changeFigure();
 				
 				// animation check
 				if(!itm.mIsDeleted) {

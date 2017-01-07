@@ -240,10 +240,11 @@ public class CollidableItem extends ItemBase implements ScrollableItem
 		if(tmp3 != null){
 			mSprite.setTextureUv(tmp3);
 		}
-		
-		if(mani){
-			
-		}
+
+    Vec2 tmp4 = mAnimSequencer.getFunc();
+    if(tmp4 != null){
+    }
+    
 		return pos;
 	}
 	

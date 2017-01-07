@@ -18,6 +18,7 @@ abstract public class GestureListenerBase implements GestureDetector.OnGestureLi
 		public void onFling(PointF pos1, PointF pos2, float vx, float v2);
 		public void onScroll(PointF pos1, PointF pos2, float x, float y);
 		public void onSingleTapUp(PointF pos);
+    public void onUp(PointF pos);
 	}
 	
 	protected notifyEventListener mNE;
@@ -35,5 +36,7 @@ abstract public class GestureListenerBase implements GestureDetector.OnGestureLi
 	public void setListener(notifyEventListener ne){
 		mNE = ne;
 	}
+
+  abstract public boolean onUp(MotionEvent event);
 	
 }

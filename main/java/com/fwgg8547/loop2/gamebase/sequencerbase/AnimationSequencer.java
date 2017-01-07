@@ -15,6 +15,7 @@ public class AnimationSequencer
 	private RotateSequence[] mRotateSequence;
 	private ScaleSequence[]  mScaleSequence;
 	private TextureSequence[] mTextureSequence;
+  private ManualSequence [] mManualSequece;
 	private Vec2 mCurrentVect;
 	private List<Callback> mCallbacks;
 	private ItemBase mOwnerItem;
@@ -30,20 +31,23 @@ public class AnimationSequencer
 	
 	
 	public static class CurrentFrame {
-		public int mtick;
-		public int rtick;
-		public int stick;
-		public int ttick;
-		
+		public int mtick; // motion
+		public int rtick; // rotate
+		public int stick; // scale
+		public int ttick; // texture
+    public int ftick; // func
+    
 		public int mindex;
 		public int rindex;
 		public int sindex;
 		public int tindex;
-		
+		public int findex;
+    
 		public boolean mvalid;
 		public boolean rvalid;
 		public boolean svalid;
 		public boolean tvalid;
+    public boolean fvalid;
 	}
 	
 	public AnimationSequencer(){
@@ -124,6 +128,22 @@ public class AnimationSequencer
 		mAnimFrame.tvalid = true;
 	}
 
+  public void Initialize(ManualSequence[] ms, ItemBase i, Callback cb) {
+    
+    mTick = 0;
+    mAnimFrame.fvalid = false;
+    mAnimFrame.ftick = mManualSequece[0].frame;
+    mAnimFrame.mindex = 0;
+    mManualSequece = ms;
+    
+    if(cb != null) {
+      mCallbacks.add(cb);
+      mOwnerItem = i;
+    }
+    
+    mAnimFrame.fvalid = true;
+  }
+  
 	public void Initialize(MotionSequnce[] ms, RotateSequence[] rs ,ScaleSequence[] as, TextureSequence[] ts, ItemBase i, Callback cb){
 		mAnimFrame.mvalid = false;
 		mAnimFrame.rvalid = false;
@@ -160,6 +180,10 @@ public class AnimationSequencer
 		}
 	}
 
+  public void stopManualFunc() {
+    mAnimFrame.fvalid = false;
+  }
+  
 	public void stopMotion(){
 		mAnimFrame.mvalid = false;
 	}
@@ -184,16 +208,18 @@ public class AnimationSequencer
 			mAnimFrame.svalid = true;
 			mAnimFrame.tvalid = true;
 			mAnimFrame.rvalid = true;
+      		mAnimFrame.fvalid = true;
 		} else {
 			mAnimFrame.mvalid = false;
 			mAnimFrame.svalid = false;
 			mAnimFrame.tvalid = false;
 			mAnimFrame.rvalid = false;
+      		mAnimFrame.fvalid = false;
 		}
 	}
 
 	public boolean getValid() {
-		return (mAnimFrame.mvalid ||mAnimFrame.rvalid || mAnimFrame.svalid || mAnimFrame.tvalid);
+		return (mAnimFrame.mvalid ||mAnimFrame.rvalid || mAnimFrame.svalid || mAnimFrame.tvalid || mAnimFrame.fvalid);
 	}
 
 	public boolean getMotionValid() {
@@ -203,9 +229,13 @@ public class AnimationSequencer
 	public boolean getRotateValid() {
 		return mAnimFrame.rvalid;
 	}
-	
+
+  public boolean getManualFuncValid() {
+    return mAnimFrame.fvalid;
+  }
+
 	public void tick(){
-		if(!(mAnimFrame.mvalid || mAnimFrame.rvalid || mAnimFrame.svalid || mAnimFrame.tvalid)){
+		if(!(mAnimFrame.mvalid || mAnimFrame.rvalid || mAnimFrame.svalid || mAnimFrame.tvalid || mAnimFrame.fvalid)){
 			return;
 		}
 		
@@ -283,7 +313,28 @@ public class AnimationSequencer
 				}
 			}
 		}
-		
+
+    	if (mManualSequece != null
+    	&& mAnimFrame.fvalid
+    	&& mAnimFrame.ftick != 0
+    	&& mTick > 0
+    	&& (mTick % mAnimFrame.ftick) == 0) {
+			mAnimFrame.findex++;
+
+			if (mAnimFrame.findex >= mManualSequece.length) {
+				mAnimFrame.findex = 0;
+			}
+
+			mAnimFrame.ftick = mManualSequece[mAnimFrame.findex].frame;
+
+			if (mAnimFrame.ftick < 0) {
+				mAnimFrame.fvalid = false;
+				for (int i = 0, n = mCallbacks.size(); i < n; i++) {
+					mCallbacks.remove(i).notify(mOwnerItem, 4);
+				}
+			}
+		}
+
 		mTick++;
 		if(mTick >= MAX_TICK_COUNT){
 			mTick = 0;
@@ -328,4 +379,12 @@ public class AnimationSequencer
 			return null;
 		}
 	}
+
+  public Vec2 getFunc() {
+    if(mManualSequece != null) {
+      return mManualSequece[mAnimFrame.findex].func.doFunc();
+    } else {
+      return null;
+    }
+  }
 }

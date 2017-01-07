@@ -54,6 +54,19 @@ public class GestureListener extends GestureListenerBase
 		}
 		return false;
 	}
+  
+  @Override
+  public boolean onUp(MotionEvent event) {
+		RectF screen = ScreenModel.getInstance().getScreenInfo();
+		float ty1 = screen.height() - event.getY();
+		Lg.d(TAG,"onDown "+event.getX()+"|"+ty1);
+				
+		
+		if(mNE != null){
+			mNE.onUp(new PointF(event.getX(), ty1));
+		}
+		return false;
+  }
 
 	@Override
 	public boolean onFling(MotionEvent event1, MotionEvent event2, float vx, float vy)
