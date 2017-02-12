@@ -9,11 +9,11 @@ public class SpringAnim extends AnimationFunc {
   Vec2 mSpringLength;
   float mVelocity;
   float mMass = 5;
-  float mStrength = 0.15f;
-  float mDamping = 0.98f;
+  float mStrength = 0.9f;
+  float mDamping = 0.9f;
   
   public SpringAnim(Vec2 initSpringLength, Vec2 springLength) {
-    mInitSpringLength = springLength;
+    mInitSpringLength = initSpringLength;
     mSpringLength = springLength;
   }
 
@@ -23,6 +23,7 @@ public class SpringAnim extends AnimationFunc {
   
   public Vec2 doFunc() {
     float forceY = (mInitSpringLength.y -mSpringLength.y)*mStrength;
+		//float forceY = (mSpringLength.y - mInitSpringLength.y)*mStrength;
     float ay = forceY / mMass;
     mVelocity = mDamping * (mVelocity + ay);
     mSpringLength.y = mSpringLength.y + mVelocity;

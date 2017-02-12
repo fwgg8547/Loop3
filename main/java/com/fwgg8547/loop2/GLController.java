@@ -177,12 +177,19 @@ TouchModel.CreateCallback
 	public void onScroll(PointF pos1, PointF pos2, float x, float y)
 	{
 		Lg.i(TAG, "scroll x y " + pos2.x + " ; " + pos2.y +";" +x+";"+y);
+		Lg.i(TAG, "item pos x y " + mSelectedBlock.getPosition().x + "|" + mSelectedBlock.getPosition().y);
+		if(mSelectedBlock != null){
+
+
+			mSelectedBlock.setNextTop(mTouchItem.getPosition());
+		}
+		
 		if(mTouchItem != null){
 			mTouchItem.setPosition(pos2.x, pos2.y, 0, 0);
 		}
-		if(mSelectedBlock != null){
-			mSelectedBlock.setNextTop(mTouchItem.getPosition());
-		}
+		
+		
+
 	}
 	
 	private void releaseSelected(){

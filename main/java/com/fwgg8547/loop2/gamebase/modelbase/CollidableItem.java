@@ -243,8 +243,17 @@ public class CollidableItem extends ItemBase implements ScrollableItem
 
     Vec2 tmp4 = mAnimSequencer.getFunc();
     if(tmp4 != null){
+			Quadrilateral o = mSprite.getQuad();
+			PointF opos = getPosition();
+			mSprite.setQuad( new Quadrilateral(
+				new PointF(o.topleft.x, o.topleft.y),
+				new PointF(o.topright.x, o.topright.y),
+				new PointF(o.bottomright.x, tmp4.y),
+				new PointF(o.bottomleft.x, tmp4.y)
+				//new PointF(o.bottomright.x, tmp4.y-opos.y),
+				//new PointF(o.bottomleft.x, tmp4.y-opos.y)
+			));
     }
-    
 		return pos;
 	}
 	

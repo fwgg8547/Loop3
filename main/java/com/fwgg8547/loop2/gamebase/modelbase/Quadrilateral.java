@@ -21,6 +21,13 @@ public class Quadrilateral
 		bottomright = br;
 	}
 	
+	public Quadrilateral(Quadrilateral q){
+		topleft = new PointF(q.topleft.x, q.topleft.y);
+		topright = new PointF(q.topright.x, q.topright.y);
+		bottomleft = new PointF(q.bottomleft.x, q.bottomleft.y);
+		bottomright = new PointF(q.bottomright.x, q.bottomright.y);
+	}
+	
 	public PointF[] getVertices() {
 		return new PointF[]{
 			topleft, topright, bottomleft, bottomright

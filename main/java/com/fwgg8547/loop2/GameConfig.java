@@ -20,7 +20,7 @@ public class GameConfig
 	// Map define
 	public static final int MAPHEIGHT=10;
 	public static final int MAPOFFSETW=0;
-	public static final int MAPINITIALW = 5;
+	public static final int MAPINITIALW = 10;
 	public static final int MAPWIDTH=MAPINITIALW + MAPOFFSETW*2;
 	public static final float LEFTOFFSET=200;
 	public static final float BOTTOMOFFSET=50;

@@ -132,8 +132,8 @@ public class AnimationSequencer
     
     mTick = 0;
     mAnimFrame.fvalid = false;
-    mAnimFrame.ftick = mManualSequece[0].frame;
-    mAnimFrame.mindex = 0;
+    mAnimFrame.ftick = ms[0].frame;
+    mAnimFrame.findex = 0;
     mManualSequece = ms;
     
     if(cb != null) {
@@ -342,7 +342,7 @@ public class AnimationSequencer
 	}
 
 	public Vec2 getVector() {
-		if(mMotionSequence != null){
+		if(mAnimFrame.mvalid && (mMotionSequence != null)){
 			float ppf = mMotionSequence[mAnimFrame.mindex].ppf;
 			mCurrentVect.x = mMotionSequence[mAnimFrame.mindex].direct.x * ppf;
 			mCurrentVect.y = mMotionSequence[mAnimFrame.mindex].direct.y * ppf;
@@ -353,7 +353,7 @@ public class AnimationSequencer
 	}
 
 	public float getRotate() {
-		if(mRotateSequence != null){
+		if(mAnimFrame.rvalid && (mRotateSequence != null)){
 			float dpf = mRotateSequence[mAnimFrame.rindex].dpf;
 			return dpf;
 		} else {
@@ -363,6 +363,7 @@ public class AnimationSequencer
 	
 	public Vec2 getScale(){
 		try{
+			if(!mAnimFrame.svalid) return null;
 			return new Vec2(
 				mScaleSequence[mAnimFrame.sindex].scalex,
 				mScaleSequence[mAnimFrame.sindex].scaley
@@ -374,6 +375,7 @@ public class AnimationSequencer
 	
 	public float[] getTextureUv(){
 		try{
+			if(!mAnimFrame.tvalid) return null;
 			return mTextureSequence[mAnimFrame.tindex].uv;
 		}catch(Exception e){
 			return null;
@@ -381,10 +383,11 @@ public class AnimationSequencer
 	}
 
   public Vec2 getFunc() {
-    if(mManualSequece != null) {
-      return mManualSequece[mAnimFrame.findex].func.doFunc();
-    } else {
-      return null;
-    }
+		try{
+			if(!mAnimFrame.fvalid) return null;
+			return mManualSequece[mAnimFrame.findex].func.doFunc();
+		} catch(Exception e){
+			return null;
+		}
   }
 }

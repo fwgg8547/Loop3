@@ -36,6 +36,16 @@ public class BlockItem extends CollidableItem
 		super();
 		mIsSelect = false;
 	}
+
+	@Override
+	public void setQuadrilateral(Quadrilateral q)
+	{
+		// TODO: Implement this method
+		super.setQuadrilateral(q);
+		if(mInitQuad == null){
+			mInitQuad = new Quadrilateral(q);
+		}
+	}
 	
 	public void setNextTop(PointF pos){
 		Quadrilateral o = mSprite.getQuad();
@@ -43,6 +53,28 @@ public class BlockItem extends CollidableItem
 		mNewQuad = new Quadrilateral(
 		new PointF(o.topleft.x, o.topleft.y),
 		new PointF(o.topright.x, o.topright.y),
+			new PointF(o.bottomright.x, pos.y-opos.y),
+			new PointF(o.bottomleft.x, pos.y-opos.y)
+		);
+	}
+	
+	public void setNextRight(PointF pos){
+		Quadrilateral o = mSprite.getQuad();
+		PointF opos = getPosition();
+		mNewQuad = new Quadrilateral(
+			new PointF(o.topleft.x, o.topleft.y),
+			new PointF(pos.x-opos.x, o.topright.y),
+			new PointF(pos.x-opos.x, o.bottomright.y),
+			new PointF(o.bottomleft.x, o.bottomleft.y)
+		);
+	}
+	
+	public void setNextTop(Vec2 pos){
+		Quadrilateral o = mSprite.getQuad();
+		PointF opos = getPosition();
+		mNewQuad = new Quadrilateral(
+			new PointF(o.topleft.x, o.topleft.y),
+			new PointF(o.topright.x, o.topright.y),
 			new PointF(o.bottomright.x, pos.y-opos.y),
 			new PointF(o.bottomleft.x, pos.y-opos.y)
 		);
@@ -117,10 +149,26 @@ public class BlockItem extends CollidableItem
       mIsSelect = b;
       if (b) {
         // select
-        mInitQuad = mSprite.getQuad();
+				mAnimSequencer.stopManualFunc();
+        //mInitQuad = mSprite.getQuad();
       } else {
         // release
-        mNewQuad = mInitQuad;
+				Vec2 init = new Vec2(mInitQuad.bottomleft.x, mInitQuad.bottomleft.y);
+				Quadrilateral q = mSprite.getQuad();
+				Vec2 now = new Vec2(q.bottomleft.x, q.bottomleft.y);
+				mSpringAnim = new SpringAnim(init, now);
+				ManualSequence ms[] = {new ManualSequence(120, mSpringAnim),
+				new ManualSequence(-1,null)};
+				mAnimSequencer.Initialize(ms,this,null);
+				/*
+				new AnimationSequencer.Callback(){
+					public void notify(ItemBase i, int type){
+						
+					}
+				}
+				);
+				*/
+        //mNewQuad = mInitQuad;
       }
     }
 	}
